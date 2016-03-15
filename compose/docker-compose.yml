@@ -1,0 +1,88 @@
+version: '2'
+services:
+  ef:
+    image: contapp/enginframe
+    ports:
+      - "8080:8080"
+    volumes:
+      - /opt/nice/enginframe/spoolers:/opt/nice/enginframe/spoolers
+      - /opt/nice/enginframe/sessions:/opt/nice/enginframe/sessions
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /lib/x86_64-linux-gnu/libseccomp.so.2:/lib64/libseccomp.so.2:ro
+      - /lib/x86_64-linux-gnu/libapparmor.so.1:/lib64/libapparmor.so.1:ro
+      - /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1:/lib64/libdevmapper.so.1.02.1:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    volumes_from:
+      - openlava
+#      - ruser-data
+    hostname: master
+    # container_name: ef
+    # stdin_open: true
+    # tty: true
+    # restart: always
+    depends_on:
+      - openlava
+  olclient1:
+    image: contapp/openlava-client
+    volumes_from:
+      - openlava
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /lib/x86_64-linux-gnu/libseccomp.so.2:/lib64/libseccomp.so.2:ro
+      - /lib/x86_64-linux-gnu/libapparmor.so.1:/lib64/libapparmor.so.1:ro
+      - /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1:/lib64/libdevmapper.so.1.02.1:ro
+    depends_on:
+      - ef
+  olclient2:
+    image: contapp/openlava-client
+    volumes_from:
+      - openlava
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /lib/x86_64-linux-gnu/libseccomp.so.2:/lib64/libseccomp.so.2:ro
+      - /lib/x86_64-linux-gnu/libapparmor.so.1:/lib64/libapparmor.so.1:ro
+      - /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1:/lib64/libdevmapper.so.1.02.1:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    depends_on:
+      - ef
+  olclient3:
+    image: contapp/openlava-client
+    volumes_from:
+      - openlava
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /lib/x86_64-linux-gnu/libseccomp.so.2:/lib64/libseccomp.so.2:ro
+      - /lib/x86_64-linux-gnu/libapparmor.so.1:/lib64/libapparmor.so.1:ro
+      - /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1:/lib64/libdevmapper.so.1.02.1:ro
+    depends_on:
+      - ef
+  openlava:
+    image: contapp/openlava
+    # container_name: ol
+  rviz2d:
+    image: contapp/rviz2d
+    ports:
+      - 5901:5901
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
+#  ruser-data:
+    
+# volumes:
+#  - /var/run/docker.sock:
+#     external: true
+#  - /usr/bin/docker:
+#     external: true
+#  - /lib/x86_64-linux-gnu/libseccomp.so.2:
+#     external: true
+#  - /lib/x86_64-linux-gnu/libapparmor.so.1:
+#     external: true
+#  - /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1:
+#     external: true
+#  - /tmp/.X11-unix:
+#     external: true
+# 
