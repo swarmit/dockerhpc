@@ -45,10 +45,3 @@ CMD [ "/setup.sh", "nobash" ]
 
 # VOLUME /opt/nice/enginframe
 
-# RUN mkdir /home/ruser
-# RUN chmod ruser /home/ruser
-
-# VOLUME /home/ruser
-
-# clean up
-# EF needs Java;  RUN rm -rf /opt/jdk-linux-x64
