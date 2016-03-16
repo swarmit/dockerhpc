@@ -1,5 +1,5 @@
 FROM centos:latest
-MAINTAINER contapp
+MAINTAINER appzhub
 
 # RUN echo deb http://www.openfoam.com/download/ubuntu trusty main >> /etc/apt/sources.list.d/openfoam.list
 
@@ -45,3 +45,10 @@ CMD [ "/setup.sh", "nobash" ]
 
 # VOLUME /opt/nice/enginframe
 
+# RUN mkdir /home/ruser
+# RUN chmod ruser /home/ruser
+
+# VOLUME /home/ruser
+
+# clean up
+# EF needs Java;  RUN rm -rf /opt/jdk-linux-x64
