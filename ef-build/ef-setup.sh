@@ -24,7 +24,18 @@ service enginframe start
 . /etc/profile.d/openlava.sh
 # echo "For OpenLava profile: . /etc/profile.d/openlava.sh"
 
-trap 'echo "TRAP SIGTERM received ...";  grep -v $HOSTNAME /opt/openlava-3.3/etc/hosts > /opt/openlava-3.3/etc/hosts.TMP; mv /opt/openlava-3.3/etc/hosts.TMP /opt/openlava-3.3/etc/hosts; grep -v $HOSTNAME /opt/openlava-3.3/etc/lsf.cluster.openlava > /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP; mv /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP /opt/openlava-3.3/etc/lsf.cluster.openlava;  exit 0' SIGTERM
+function f_terminate  {
+    echo "TRAP SIGTERM received ...";
+    while [ -f lsf.cluster.openlava.LOCK ] ; do sleep 0.21;  done
+    touch lsf.cluster.openlava.LOCK
+    grep -v $HOSTNAME /opt/openlava-3.3/etc/hosts > /opt/openlava-3.3/etc/hosts.TMP;
+    mv /opt/openlava-3.3/etc/hosts.TMP /opt/openlava-3.3/etc/hosts
+    grep -v $HOSTNAME /opt/openlava-3.3/etc/lsf.cluster.openlava > /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP;
+    mv /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP /opt/openlava-3.3/etc/lsf.cluster.openlava;
+    rm lsf.cluster.openlava.LOCK
+    }
+
+trap 'f_terminate;  exit 0' SIGTERM
 
 if [ "$1" == "nobash" ] ; then
     while true; do sleep 1; done
