@@ -1,3 +1,5 @@
+VENDOR="happsup"
+VENDOR="appzhup"
 VENDOR="contapp"
 prod="ruser-data"
 # docker build -t $VENDOR/$prod . 

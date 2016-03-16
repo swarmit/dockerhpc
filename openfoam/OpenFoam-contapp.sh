@@ -76,7 +76,7 @@ paraFoam
 echo "Starting Docker OpenFOAM+ container ${containerName} ..."
 
 USERVOL="  --volume=${home}:${home} "
-USERVOL=" --volumes-from ruser-data "
+# USERVOL=" --volumes-from ruser-data "
 
 
 docker run -h openfoam  -it --name ${containerName} --user=${user} -e USER=${user} -e QT_X11_NO_MITSHM=1 -e DISPLAY=${displayVar} --workdir="${home}" $USERVOL  --volume="/etc/group:/etc/group:ro"  --volume="/etc/passwd:/etc/passwd:ro"  --volume="/etc/shadow:/etc/shadow:ro"  --volume="/etc/sudoers.d:/etc/sudoers.d:ro" -v=/tmp/.X11-unix:/tmp/.X11-unix  ${imageName}  /bin/bash --rcfile /opt/OpenFOAM/OpenFOAM-v3.0+/etc/bashrc 

@@ -1,6 +1,10 @@
+VENDOR="happsup"
+VENDOR="appzhup"
 VENDOR="contapp"
 prod="rviz2d"
 docker build  -t $VENDOR/$prod . 
+
+# docker build --no-cache -t appzhub/openlava . # This build and tag the image with appzhub/openlava:latest
 
 docker tag $VENDOR/$prod $VENDOR/$prod:latest
 

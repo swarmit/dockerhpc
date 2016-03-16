@@ -15,8 +15,11 @@ chown ruser /home/ruser
 # add host to cluster
 if [ "`grep $HOSTNAME lsf.cluster.openlava`""0" == "0" ] ; then 
   echo "Adding host $HOSTNAME to the OpenLava configuration ..."
+  while [ -f lsf.cluster.openlava.LOCK ] ; do sleep 0.3;  done
+  touch lsf.cluster.openlava.LOCK
   cat lsf.cluster.openlava | sed -e 's/\(# yourhost.*$\)/\1\n'$HOSTNAME'        DEFAULT   linux  1 -  (cs)/' > lsf.cluster.openlava.TMP
   mv lsf.cluster.openlava.TMP lsf.cluster.openlava
+  rm lsf.cluster.openlava.LOCK
   grep $HOSTNAME /etc/hosts >> /opt/openlava-3.3/etc/hosts
 fi
 if [ "`grep $HOSTNAME /opt/openlava-3.3/etc/hosts`""0" == "0" ] ; then 
@@ -70,7 +73,18 @@ lsload
 
 # echo "For OpenLava profile: . /etc/profile.d/openlava.sh"
 
-trap 'echo "TRAP SIGTERM received ...";  grep -v $HOSTNAME /opt/openlava-3.3/etc/hosts > /opt/openlava-3.3/etc/hosts.TMP; mv /opt/openlava-3.3/etc/hosts.TMP /opt/openlava-3.3/etc/hosts; grep -v $HOSTNAME /opt/openlava-3.3/etc/lsf.cluster.openlava > /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP; mv /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP /opt/openlava-3.3/etc/lsf.cluster.openlava;  exit 0' SIGTERM
+function f_terminate  {
+    echo "TRAP SIGTERM received ...";
+    while [ -f lsf.cluster.openlava.LOCK ] ; do sleep 0.21;  done
+    touch lsf.cluster.openlava.LOCK
+    grep -v $HOSTNAME /opt/openlava-3.3/etc/hosts > /opt/openlava-3.3/etc/hosts.TMP;
+    mv /opt/openlava-3.3/etc/hosts.TMP /opt/openlava-3.3/etc/hosts
+    grep -v $HOSTNAME /opt/openlava-3.3/etc/lsf.cluster.openlava > /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP;
+    mv /opt/openlava-3.3/etc/lsf.cluster.openlava.TMP /opt/openlava-3.3/etc/lsf.cluster.openlava;
+    rm lsf.cluster.openlava.LOCK
+    }
+
+trap 'f_terminate;  exit 0' SIGTERM
 
 # trap 'echo TRAP SIGTERM received ... ;  exit 0' SIGTERM
 trap 'echo TRAP SIGKILL received ... ;  exit 0' SIGKILL
