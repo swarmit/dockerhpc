@@ -3,6 +3,8 @@ PROD=enginframe
 
 docker build -t $VENDOR/$PROD . # This build and tag the image with appzhub/openlava:latest
 
+# docker build --no-cache -t appzhub/openlava . # This build and tag the image with appzhub/openlava:latest
+
 docker tag  $VENDOR/$PROD  $VENDOR/$PROD:2015.1  # Add a new tag
 
 # echo  d run -it --name ef --volumes-from ol appzhub/enginframe
