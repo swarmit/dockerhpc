@@ -1,3 +1,5 @@
+VENDOR="happsup"
+VENDOR="appzhup"
 VENDOR="contapp"
 prod="openlava-client"
 

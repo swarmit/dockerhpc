@@ -1,5 +1,5 @@
 FROM centos:latest
-MAINTAINER contapp
+MAINTAINER appzhub
 
 # RUN echo deb http://www.openfoam.com/download/ubuntu trusty main >> /etc/apt/sources.list.d/openfoam.list
 

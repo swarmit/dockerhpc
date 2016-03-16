@@ -11,8 +11,11 @@ fi
 
 # add host to cluster
 if [ "`grep $HOSTNAME lsf.cluster.openlava`""0" == "0" ] ; then 
+  while [ -f lsf.cluster.openlava.LOCK ] ; do sleep 0.3;  done
+  touch lsf.cluster.openlava.LOCK
   cat lsf.cluster.openlava | sed -e 's/\(# yourhost.*$\)/'$HOSTNAME'        DEFAULT   linux  1 -  (cs)\n\1/' > lsf.cluster.openlava.TMP
   mv lsf.cluster.openlava.TMP lsf.cluster.openlava
+  rm lsf.cluster.openlava.LOCK
   grep $HOSTNAME /etc/hosts >> /opt/openlava-3.3/etc/hosts
 fi
 
